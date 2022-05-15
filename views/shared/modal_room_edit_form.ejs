@@ -1,0 +1,184 @@
+<script type="text/x-template" id="modal_room_edit_form">
+    <q-dialog v-model="is_open">
+        <q-card class="my-card" style="width: 300px;">
+            <div class=" q-pa-md">
+                <q-form class="q-gutter-md" class="q-mt-md">
+                    <q-input filled v-model="formRoom.room_name" label="채팅방 이름"
+                    :error="formRoomError.room_name.length > 0" :error-message="formRoomError.room_name"></q-input>
+
+                    <q-input filled v-model="formRoom.limitation_count" label="인원수"
+                    :error="formRoomError.limitation_count.length > 0" :error-message="formRoomError.limitation_count"></q-input>
+                        
+                    <!-- <q-select filled v-model="formRoom.Room_type_view" :options="setting_list" label="시험구분" stack-label>
+                        <template v-slot:option="scope">
+                            <q-item v-bind="scope.itemProps" @click="selectRoomType(scope.opt)">
+                                {{scope.opt.value}}
+                            </q-item>
+                        </template>
+                    </q-select> -->
+                </q-form>
+            </div>
+            <div class="q-pa-md">
+                <q-btn @click="is_open=false" class="q-mr-md">취소</q-btn>
+                <q-btn color="primary" @click="handleInsert" v-if="mode == 'add'">추가</q-btn>
+                <q-btn color="primary" @click="handleEdit($event)" v-else class="q-mr-md">저장</q-btn>
+                <q-btn color="negative" @click="handleDelete" v-if="mode == 'edit'">삭제</q-btn>
+            </div>
+        </q-card>
+        
+    </q-dialog>
+</script>
+
+<script>
+    app.component("modal_room_edit_form", {
+        template: "#modal_room_edit_form",
+        data: function () {
+            return {
+                mode: 'add',
+                is_open: false,
+                formRoom: {
+                    room_id: 0,
+                    room_name: "",
+                    owner: "",
+                    owner_id: 0,
+                    created_date: "",
+                    limitation_count: 10,
+                },
+                formRoomError: {
+                    room_id: "",
+                    room_name: "",
+                    owner: "",
+                    owner_id: "",
+                    created_date: "",
+                    limitation_count: "",
+                },
+
+                callback_func: null,
+            };
+        },
+        methods: {
+            clearValue: function() {
+                var vm = this;
+                for(var k in vm.formRoom) {
+                    vm.formRoom[k] = "";
+                }
+                // default
+                vm.formRoom.limitation_count = 10;
+                vm.formRoom.owner_id = 0;
+            },
+            open: function(mode, row, callback_func) {
+                var vm = this;
+                vm.clearValue();
+                vm.$root.clearError(vm.formRoomError);
+                
+                if(row) {
+                    for(var k in vm.formRoom) {
+                        vm.formRoom[k] = row[k];
+                    }
+                    vm.mode = mode;
+                }
+                console.log(vm.mode);
+                if(callback_func) { vm.callback_func = callback_func; }
+                
+
+                vm.is_open = true;
+            },
+            handleInsert: function() {
+                var vm = this;
+                axios.get('/Room/Insert', {
+                    params: {
+                        formRoom: vm.formRoom,
+                        formUser: vm.$root.formUser,
+                    }
+                }).then(function(res) {
+                    if(!res.data.success) {
+                        if(!res.data.is_login == false) {
+                            vm.$root.location_href('login');
+                        }
+                    }
+                    if(res.data.success) {
+                        vm.is_open = false;
+                        if(vm.callback_func) {vm.callback_func(); }
+                        vm.$root.q_notify("positive", res.data.message);
+                    } else {
+                        if(res.data.error) {
+                            for(var k in res.data.error) {
+                                vm.formRoomError[k] = res.data.error[k];
+                            }
+                        }
+                    }
+                });
+            },
+            handleEdit: function() {
+                var vm = this;
+                axios.get('/Room/Edit', {
+                    params: {
+                        formRoom: vm.formRoom,
+                        formUser: vm.$root.formUser,
+                    }
+                }).then(function(res) {
+                    if(!res.data.success) {
+                        if(!res.data.is_login == false) {
+                            vm.$root.location_href('login');
+                        }
+                    }
+                    if(res.data.success) {
+                        vm.is_open = false;
+                        if(vm.callback_func) {vm.callback_func(); }
+                        vm.$root.q_notify("positive", res.data.message);
+                    } else {
+                        if(res.data.error) {
+                            for(var k in res.data.error) {
+                                vm.formRoomError[k] = res.data.error[k];
+                            }
+                        }
+                        if(res.data.message) {
+                            vm.$root.q_notify("negative", res.data.message);
+                        }
+                    }
+                });
+            },
+            handleDelete: function() {
+                var vm = this;
+                if(vm.formRoom.owner_id != vm.$root.formUser.id) {
+                    vm.$root.q_notify("negative", "방장이 아니면 삭제하실 수 없습니다.");
+                    return;
+                }
+
+                vm.$q.dialog({
+                    title: '확인',
+                    message: '정말 삭제하시겠습니까?',
+                    cancel: true,
+                }).onOk(() => {
+                    room_delete();
+                })
+                function room_delete() {
+                    axios.get('/Room/Delete', {
+                        params: {
+                            formUser: vm.$root.formUser,
+                            room_id: vm.formRoom.room_id
+                        }
+                    }).then(function(res) {
+                        if(!res.data.success) {
+                            if(!res.data.is_login == false) {
+                                vm.$root.location_href('login');
+                            }
+                        }
+                        if(res.data.success) {
+                            vm.is_open = false;
+                            if(vm.callback_func) {vm.callback_func(); }
+                            vm.$root.q_notify("positive", res.data.message);
+                        } else {
+                            if(res.data.message) {
+                                vm.$root.q_notify("negative", res.data.message);
+                            }
+                        }
+                    });
+                }
+            },
+        },
+        mounted: function() {
+            var vm = this;
+        }
+    });
+</script>

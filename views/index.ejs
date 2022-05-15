@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Index</title>
+    </head>
+    <body>
+        <% include ./shared/libs.ejs %>
+        <div id="app">
+            Test
+        </div>
+    </body>
+    <script>
+        
+        const app = Vue.createApp({
+            data () {
+                return {
+                   
+                }
+            },
+            methods: {
+                
+            },
+            mounted: function() {
+                
+            },
+            created: function() {
+                var vm = this;
+                var socket = io("http://localhost:3000", {
+                    withCredentials: false,
+                    transports : ['websocket'],
+                });
+                vm.socket = socket;
+            },
+        });
+    </script>
+   
+    <script>
+        app.use(Quasar);
+        app.mount('#app');
+    </script>
+</html>

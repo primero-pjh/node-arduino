@@ -1,0 +1,288 @@
+0 info it worked if it ends with ok
+1 verbose cli [ '/usr/bin/node', '/usr/bin/npm', 'install', 'vue@next' ]
+2 info using npm@3.5.2
+3 info using node@v8.10.0
+4 silly loadCurrentTree Starting
+5 silly install loadCurrentTree
+6 silly install readLocalPackageData
+7 silly fetchPackageMetaData vue@next
+8 silly fetchNamedPackageData vue
+9 silly mapToRegistry name vue
+10 silly mapToRegistry using default registry
+11 silly mapToRegistry registry https://registry.npmjs.org/
+12 silly mapToRegistry uri https://registry.npmjs.org/vue
+13 verbose get https://registry.npmjs.org/vue not expired, no request
+14 silly install normalizeTree
+15 silly loadCurrentTree Finishing
+16 silly loadIdealTree Starting
+17 silly install loadIdealTree
+18 silly cloneCurrentTree Starting
+19 silly install cloneCurrentTreeToIdealTree
+20 silly cloneCurrentTree Finishing
+21 silly loadShrinkwrap Starting
+22 silly install loadShrinkwrap
+23 silly loadShrinkwrap Finishing
+24 silly loadAllDepsIntoIdealTree Starting
+25 silly install loadAllDepsIntoIdealTree
+26 silly resolveWithNewModule vue@3.1.5 checking installable status
+27 silly cache add args [ 'vue@next', null ]
+28 verbose cache add spec vue@next
+29 silly cache add parsed spec Result {
+29 silly cache add   raw: 'vue@next',
+29 silly cache add   scope: null,
+29 silly cache add   name: 'vue',
+29 silly cache add   rawSpec: 'next',
+29 silly cache add   spec: 'next',
+29 silly cache add   type: 'tag' }
+30 silly addNamed vue@next
+31 verbose addNamed "next" is being treated as a dist-tag for vue
+32 info addNameTag [ 'vue', 'next' ]
+33 silly mapToRegistry name vue
+34 silly mapToRegistry using default registry
+35 silly mapToRegistry registry https://registry.npmjs.org/
+36 silly mapToRegistry uri https://registry.npmjs.org/vue
+37 verbose addNameTag registry:https://registry.npmjs.org/vue not in flight; fetching
+38 verbose request uri https://registry.npmjs.org/vue
+39 verbose request no auth needed
+40 info attempt registry request try #1 at 오후 8:36:37
+41 verbose request id 033edbc251434e8b
+42 verbose etag W/"ce7d7e2f8d408bbecd67d24ea04f6fc4"
+43 verbose lastModified Wed, 21 Jul 2021 21:41:03 GMT
+44 http request GET https://registry.npmjs.org/vue
+45 http 304 https://registry.npmjs.org/vue
+46 verbose headers { date: 'Fri, 23 Jul 2021 11:36:37 GMT',
+46 verbose headers   connection: 'keep-alive',
+46 verbose headers   'cf-ray': '67349cb16b0e61d0-ICN',
+46 verbose headers   age: '5536',
+46 verbose headers   'cache-control': 'public, max-age=300',
+46 verbose headers   etag: '"ce7d7e2f8d408bbecd67d24ea04f6fc4"',
+46 verbose headers   'last-modified': 'Wed, 21 Jul 2021 21:41:03 GMT',
+46 verbose headers   vary: 'Accept-Encoding',
+46 verbose headers   'cf-cache-status': 'HIT',
+46 verbose headers   'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+46 verbose headers   'x-amz-replication-status': 'COMPLETED',
+46 verbose headers   server: 'cloudflare' }
+47 silly get cb [ 304,
+47 silly get   { date: 'Fri, 23 Jul 2021 11:36:37 GMT',
+47 silly get     connection: 'keep-alive',
+47 silly get     'cf-ray': '67349cb16b0e61d0-ICN',
+47 silly get     age: '5536',
+47 silly get     'cache-control': 'public, max-age=300',
+47 silly get     etag: '"ce7d7e2f8d408bbecd67d24ea04f6fc4"',
+47 silly get     'last-modified': 'Wed, 21 Jul 2021 21:41:03 GMT',
+47 silly get     vary: 'Accept-Encoding',
+47 silly get     'cf-cache-status': 'HIT',
+47 silly get     'expect-ct': 'max-age=604800, report-uri="https://report-uri.cloudflare.com/cdn-cgi/beacon/expect-ct"',
+47 silly get     'x-amz-replication-status': 'COMPLETED',
+47 silly get     server: 'cloudflare' } ]
+48 verbose etag https://registry.npmjs.org/vue from cache
+49 verbose get saving vue to /root/.npm/registry.npmjs.org/vue/.cache.json
+50 silly addNameTag next cb for vue with tag next
+51 silly addNamed vue@3.1.5
+52 verbose addNamed "3.1.5" is a plain semver version for vue
+53 silly cache afterAdd vue@3.1.5
+54 verbose afterAdd /root/.npm/vue/3.1.5/package/package.json not in flight; writing
+55 verbose afterAdd /root/.npm/vue/3.1.5/package/package.json written
+56 silly fetchNamedPackageData @vue/shared
+57 silly mapToRegistry name @vue/shared
+58 silly mapToRegistry scope (from package name) @vue
+59 verbose mapToRegistry no registry URL found in name for scope @vue
+60 silly mapToRegistry using default registry
+61 silly mapToRegistry registry https://registry.npmjs.org/
+62 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fshared
+63 silly fetchNamedPackageData @vue/compiler-dom
+64 silly mapToRegistry name @vue/compiler-dom
+65 silly mapToRegistry scope (from package name) @vue
+66 verbose mapToRegistry no registry URL found in name for scope @vue
+67 silly mapToRegistry using default registry
+68 silly mapToRegistry registry https://registry.npmjs.org/
+69 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-dom
+70 silly fetchNamedPackageData @vue/runtime-dom
+71 silly mapToRegistry name @vue/runtime-dom
+72 silly mapToRegistry scope (from package name) @vue
+73 verbose mapToRegistry no registry URL found in name for scope @vue
+74 silly mapToRegistry using default registry
+75 silly mapToRegistry registry https://registry.npmjs.org/
+76 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fruntime-dom
+77 verbose get https://registry.npmjs.org/@vue%2fshared not expired, no request
+78 silly resolveWithNewModule @vue/shared@3.1.5 checking installable status
+79 silly cache add args [ '@vue/shared@3.1.5', null ]
+80 verbose cache add spec @vue/shared@3.1.5
+81 silly cache add parsed spec Result {
+81 silly cache add   raw: '@vue/shared@3.1.5',
+81 silly cache add   scope: '@vue',
+81 silly cache add   name: '@vue/shared',
+81 silly cache add   rawSpec: '3.1.5',
+81 silly cache add   spec: '3.1.5',
+81 silly cache add   type: 'version' }
+82 silly addNamed @vue/shared@3.1.5
+83 verbose addNamed "3.1.5" is a plain semver version for @vue/shared
+84 silly mapToRegistry name @vue/shared
+85 silly mapToRegistry scope (from package name) @vue
+86 verbose mapToRegistry no registry URL found in name for scope @vue
+87 silly mapToRegistry using default registry
+88 silly mapToRegistry registry https://registry.npmjs.org/
+89 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fshared
+90 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fshared not in flight; fetching
+91 verbose get https://registry.npmjs.org/@vue%2fruntime-dom not expired, no request
+92 silly resolveWithNewModule @vue/runtime-dom@3.1.5 checking installable status
+93 silly cache add args [ '@vue/runtime-dom@3.1.5', null ]
+94 verbose cache add spec @vue/runtime-dom@3.1.5
+95 silly cache add parsed spec Result {
+95 silly cache add   raw: '@vue/runtime-dom@3.1.5',
+95 silly cache add   scope: '@vue',
+95 silly cache add   name: '@vue/runtime-dom',
+95 silly cache add   rawSpec: '3.1.5',
+95 silly cache add   spec: '3.1.5',
+95 silly cache add   type: 'version' }
+96 silly addNamed @vue/runtime-dom@3.1.5
+97 verbose addNamed "3.1.5" is a plain semver version for @vue/runtime-dom
+98 silly mapToRegistry name @vue/runtime-dom
+99 silly mapToRegistry scope (from package name) @vue
+100 verbose mapToRegistry no registry URL found in name for scope @vue
+101 silly mapToRegistry using default registry
+102 silly mapToRegistry registry https://registry.npmjs.org/
+103 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fruntime-dom
+104 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fruntime-dom not in flight; fetching
+105 verbose get https://registry.npmjs.org/@vue%2fcompiler-dom not expired, no request
+106 silly resolveWithNewModule @vue/compiler-dom@3.1.5 checking installable status
+107 silly cache add args [ '@vue/compiler-dom@3.1.5', null ]
+108 verbose cache add spec @vue/compiler-dom@3.1.5
+109 silly cache add parsed spec Result {
+109 silly cache add   raw: '@vue/compiler-dom@3.1.5',
+109 silly cache add   scope: '@vue',
+109 silly cache add   name: '@vue/compiler-dom',
+109 silly cache add   rawSpec: '3.1.5',
+109 silly cache add   spec: '3.1.5',
+109 silly cache add   type: 'version' }
+110 silly addNamed @vue/compiler-dom@3.1.5
+111 verbose addNamed "3.1.5" is a plain semver version for @vue/compiler-dom
+112 silly mapToRegistry name @vue/compiler-dom
+113 silly mapToRegistry scope (from package name) @vue
+114 verbose mapToRegistry no registry URL found in name for scope @vue
+115 silly mapToRegistry using default registry
+116 silly mapToRegistry registry https://registry.npmjs.org/
+117 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-dom
+118 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fcompiler-dom not in flight; fetching
+119 verbose get https://registry.npmjs.org/@vue%2fshared not expired, no request
+120 verbose get https://registry.npmjs.org/@vue%2fruntime-dom not expired, no request
+121 verbose get https://registry.npmjs.org/@vue%2fcompiler-dom not expired, no request
+122 silly cache afterAdd @vue/shared@3.1.5
+123 verbose afterAdd /root/.npm/@vue/shared/3.1.5/package/package.json not in flight; writing
+124 silly cache afterAdd @vue/runtime-dom@3.1.5
+125 verbose afterAdd /root/.npm/@vue/runtime-dom/3.1.5/package/package.json not in flight; writing
+126 silly cache afterAdd @vue/compiler-dom@3.1.5
+127 verbose afterAdd /root/.npm/@vue/compiler-dom/3.1.5/package/package.json not in flight; writing
+128 verbose afterAdd /root/.npm/@vue/shared/3.1.5/package/package.json written
+129 verbose afterAdd /root/.npm/@vue/runtime-dom/3.1.5/package/package.json written
+130 verbose afterAdd /root/.npm/@vue/compiler-dom/3.1.5/package/package.json written
+131 silly fetchNamedPackageData @vue/compiler-core
+132 silly mapToRegistry name @vue/compiler-core
+133 silly mapToRegistry scope (from package name) @vue
+134 verbose mapToRegistry no registry URL found in name for scope @vue
+135 silly mapToRegistry using default registry
+136 silly mapToRegistry registry https://registry.npmjs.org/
+137 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-core
+138 verbose get https://registry.npmjs.org/@vue%2fcompiler-core not expired, no request
+139 silly resolveWithNewModule @vue/compiler-core@3.1.5 checking installable status
+140 silly cache add args [ '@vue/compiler-core@3.1.5', null ]
+141 verbose cache add spec @vue/compiler-core@3.1.5
+142 silly cache add parsed spec Result {
+142 silly cache add   raw: '@vue/compiler-core@3.1.5',
+142 silly cache add   scope: '@vue',
+142 silly cache add   name: '@vue/compiler-core',
+142 silly cache add   rawSpec: '3.1.5',
+142 silly cache add   spec: '3.1.5',
+142 silly cache add   type: 'version' }
+143 silly addNamed @vue/compiler-core@3.1.5
+144 verbose addNamed "3.1.5" is a plain semver version for @vue/compiler-core
+145 silly mapToRegistry name @vue/compiler-core
+146 silly mapToRegistry scope (from package name) @vue
+147 verbose mapToRegistry no registry URL found in name for scope @vue
+148 silly mapToRegistry using default registry
+149 silly mapToRegistry registry https://registry.npmjs.org/
+150 silly mapToRegistry uri https://registry.npmjs.org/@vue%2fcompiler-core
+151 verbose addNameVersion registry:https://registry.npmjs.org/@vue%2fcompiler-core not in flight; fetching
+152 verbose get https://registry.npmjs.org/@vue%2fcompiler-core not expired, no request
+153 silly cache afterAdd @vue/compiler-core@3.1.5
+154 verbose afterAdd /root/.npm/@vue/compiler-core/3.1.5/package/package.json not in flight; writing
+155 verbose afterAdd /root/.npm/@vue/compiler-core/3.1.5/package/package.json written
+156 silly fetchNamedPackageData @babel/parser
+157 silly mapToRegistry name @babel/parser
+158 silly mapToRegistry scope (from package name) @babel
+159 verbose mapToRegistry no registry URL found in name for scope @babel
+160 silly mapToRegistry using default registry
+161 silly mapToRegistry registry https://registry.npmjs.org/
+162 silly mapToRegistry uri https://registry.npmjs.org/@babel%2fparser
+163 silly fetchNamedPackageData @babel/types
+164 silly mapToRegistry name @babel/types
+165 silly mapToRegistry scope (from package name) @babel
+166 verbose mapToRegistry no registry URL found in name for scope @babel
+167 silly mapToRegistry using default registry
+168 silly mapToRegistry registry https://registry.npmjs.org/
+169 silly mapToRegistry uri https://registry.npmjs.org/@babel%2ftypes
+170 silly fetchNamedPackageData estree-walker
+171 silly mapToRegistry name estree-walker
+172 silly mapToRegistry using default registry
+173 silly mapToRegistry registry https://registry.npmjs.org/
+174 silly mapToRegistry uri https://registry.npmjs.org/estree-walker
+175 silly fetchNamedPackageData source-map
+176 silly mapToRegistry name source-map
+177 silly mapToRegistry using default registry
+178 silly mapToRegistry registry https://registry.npmjs.org/
+179 silly mapToRegistry uri https://registry.npmjs.org/source-map
+180 verbose get https://registry.npmjs.org/@babel%2ftypes not expired, no request
+181 silly resolveWithNewModule @babel/types@7.14.8 checking installable status
+182 silly cache add args [ '@babel/types@^7.12.0', null ]
+183 verbose cache add spec @babel/types@^7.12.0
+184 silly cache add parsed spec Result {
+184 silly cache add   raw: '@babel/types@^7.12.0',
+184 silly cache add   scope: '@babel',
+184 silly cache add   name: '@babel/types',
+184 silly cache add   rawSpec: '^7.12.0',
+184 silly cache add   spec: '>=7.12.0 <8.0.0',
+184 silly cache add   type: 'range' }
+185 silly addNamed @babel/types@>=7.12.0 <8.0.0
+186 verbose addNamed ">=7.12.0 <8.0.0" is a valid semver range for @babel/types
+187 silly addNameRange { name: '@babel/types',
+187 silly addNameRange   range: '>=7.12.0 <8.0.0',
+187 silly addNameRange   hasData: false }
+188 silly mapToRegistry name @babel/types
+189 silly mapToRegistry scope (from package name) @babel
+190 verbose mapToRegistry no registry URL found in name for scope @babel
+191 silly mapToRegistry using default registry
+192 silly mapToRegistry registry https://registry.npmjs.org/
+193 silly mapToRegistry uri https://registry.npmjs.org/@babel%2ftypes
+194 verbose addNameRange registry:https://registry.npmjs.org/@babel%2ftypes not in flight; fetching
+195 verbose get https://registry.npmjs.org/estree-walker not expired, no request
+196 verbose stack Error: Missing required argument #1
+196 verbose stack     at andLogAndFinish (/usr/share/npm/lib/fetch-package-metadata.js:31:3)
+196 verbose stack     at fetchPackageMetadata (/usr/share/npm/lib/fetch-package-metadata.js:51:22)
+196 verbose stack     at resolveWithNewModule (/usr/share/npm/lib/install/deps.js:456:12)
+196 verbose stack     at /usr/share/npm/lib/install/deps.js:457:7
+196 verbose stack     at /usr/share/npm/node_modules/iferr/index.js:13:50
+196 verbose stack     at /usr/share/npm/lib/fetch-package-metadata.js:37:12
+196 verbose stack     at addRequestedAndFinish (/usr/share/npm/lib/fetch-package-metadata.js:82:5)
+196 verbose stack     at returnAndAddMetadata (/usr/share/npm/lib/fetch-package-metadata.js:117:7)
+196 verbose stack     at pickVersionFromRegistryDocument (/usr/share/npm/lib/fetch-package-metadata.js:134:20)
+196 verbose stack     at /usr/share/npm/node_modules/iferr/index.js:13:50
+197 verbose cwd /var/www/html/dev
+198 error Linux 4.15.0-136-generic
+199 error argv "/usr/bin/node" "/usr/bin/npm" "install" "vue@next"
+200 error node v8.10.0
+201 error npm  v3.5.2
+202 error code EMISSINGARG
+203 error typeerror Error: Missing required argument #1
+203 error typeerror     at andLogAndFinish (/usr/share/npm/lib/fetch-package-metadata.js:31:3)
+203 error typeerror     at fetchPackageMetadata (/usr/share/npm/lib/fetch-package-metadata.js:51:22)
+203 error typeerror     at resolveWithNewModule (/usr/share/npm/lib/install/deps.js:456:12)
+203 error typeerror     at /usr/share/npm/lib/install/deps.js:457:7
+203 error typeerror     at /usr/share/npm/node_modules/iferr/index.js:13:50
+203 error typeerror     at /usr/share/npm/lib/fetch-package-metadata.js:37:12
+203 error typeerror     at addRequestedAndFinish (/usr/share/npm/lib/fetch-package-metadata.js:82:5)
+203 error typeerror     at returnAndAddMetadata (/usr/share/npm/lib/fetch-package-metadata.js:117:7)
+203 error typeerror     at pickVersionFromRegistryDocument (/usr/share/npm/lib/fetch-package-metadata.js:134:20)
+203 error typeerror     at /usr/share/npm/node_modules/iferr/index.js:13:50
+204 error typeerror This is an error with npm itself. Please report this error at:
+204 error typeerror     <http://github.com/npm/npm/issues>
+205 verbose exit [ 1, true ]

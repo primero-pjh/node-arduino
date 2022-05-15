@@ -1,0 +1,65 @@
+<script type="text/x-template" id="v-native-dropdown">
+    <div v-show="is_open" class="fixed fixed-top animate__animated animate__fadeIn"
+        style="background-color: rgba(198,197,203,0.8); height: 100%; z-index: 1001" @click.self="close">
+        <div style="background-color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                border-radius: 10px; width: 80%;"
+            class="q-pa-lg shadow-20">
+            <q-btn icon="close" @click="close" class="bg-white" flat round dense style="position: absolute; top: 0; right: 0;"></q-btn>
+            <q-btn-dropdown flat color="white" text-color="black" label="선택하세요." style="width: 100%;">
+                <q-list>
+                    <q-item clickable color="white" text-color="black" v-close-popup v-for="row in list">
+                        <q-item-section @click="handleSave(row)">
+                            <q-item-label>{{row[list_field]}}</q-item-label>
+                        </q-item-section>
+                    </q-item>
+                </q-list>
+            </q-btn-dropdown>
+        </div>
+    </div>
+</script>
+
+<script>
+    app.component("v-native-dropdown", {
+        template: "#v-native-dropdown",
+        props: [ 
+        ],
+        data: function () {
+            return {
+                is_open: false,
+                row: '',
+                value: '',
+                field: '',
+
+                list: [],
+                list_field: '',
+
+                callback_func: null,
+            };
+        },
+        methods: {
+            handleSave: function(row) {
+                var vm = this;
+                vm.row[vm.field] = row[vm.list_field];
+                vm.callback_func();
+                vm.is_open = false;
+            },
+            open: function(row, field, list, list_field, callback_func) {
+                var vm = this;
+                vm.value = row[field];
+                vm.row = row;
+                vm.field = field;
+                vm.list = list;
+                vm.list_field = list_field;
+                if(callback_func) { vm.callback_func = callback_func }
+                vm.is_open = true;
+            },
+            close: function() {
+                var vm = this;
+                vm.is_open = false;
+            },
+        },
+        mounted: function() {
+            var vm = this;
+        }
+    });
+</script>

@@ -1,0 +1,52 @@
+<script type="text/x-template" id="v-native-input">
+    <div v-show="is_open" class="fixed fixed-top animate__animated animate__fadeIn"
+        transition-show="jump-down" transition-hide="jump-up"
+        style="background-color: rgba(198,197,203,0.8); height: 100%; z-index: 1001" @click.self="close">
+        <div style="background-color: white; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); 
+                border-radius: 10px; width: 80%;"
+            class="q-pa-lg shadow-20">
+            <q-btn icon="close" @click="close" class="bg-white" flat round dense style="position: absolute; top: 0; right: 0;"></q-btn>
+            <q-input color="black" v-model="value" :label="row[field]" clearable @keyup.enter="handleSave"></q-input>
+        </div>
+    </div>
+</script>
+
+<script>
+    app.component("v-native-input", {
+        template: "#v-native-input",
+        props: [ 
+        ],
+        data: function () {
+            return {
+                is_open: false,
+                row: '',
+                value: '',
+                field: '',
+                callback_func: null,
+            };
+        },
+        methods: {
+            handleSave: function() {
+                var vm = this;
+                vm.row[vm.field] = vm.value;
+                vm.callback_func();
+                vm.is_open = false;
+            },
+            open: function(row, field, callback_func) {
+                var vm = this;
+                vm.value = row[field];
+                vm.row = row;
+                vm.field = field;
+                if(callback_func) { vm.callback_func = callback_func }
+                vm.is_open = true;
+            },
+            close: function() {
+                var vm = this;
+                vm.is_open = false;
+            },
+        },
+        mounted: function() {
+            var vm = this;
+        }
+    });
+</script>

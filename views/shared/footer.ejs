@@ -1,0 +1,39 @@
+<script type="text/x-template" id="v-footer">
+    <div class="bg-white w100p" style="position: fixed; bottom: 0;">
+        <div class="bg-white" >
+            <q-tabs class=""  align="left" >
+                <template v-for="row in window_list">
+                    <q-tab color="primary" class="shadow-4" :name="row.Title" :label="row.Title" @click="open_element(row)"></q-tab>
+                </template>
+            </q-tabs>
+        </div>
+    </div>
+</script>
+
+<style>
+    #footer_element article:hover {
+        background-color: #eee;
+    }
+</style>
+
+<script>
+    app.component("v-footer", {
+        template: "#v-footer",
+        data: function () {
+            return {
+                window_list: [
+                    { Title: "DWCHAT" },
+                ],
+            };
+        },
+        methods: {
+            open_element: function(row) {
+                var vm = this;
+                vm.$root.$refs.ChatForm.is_open = true
+            },
+        },
+        mounted: function() {
+            var vm = this;
+        }
+    });
+</script>

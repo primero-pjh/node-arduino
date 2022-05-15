@@ -1,0 +1,82 @@
+<script type="text/x-template" id="v-header">
+    <div id="" class="header shadow-2 row" style="position: relative; background-color: white;">
+        <q-bar style="width: 100%; height: 100%; background-color: white;">
+            <div class="">
+                <img src="/images/doge_v3.png" style="width: 40px; cursor: pointer;" @click="location_href('home')">
+            </div>
+            <div style="font-weight: bold;">
+                PRITRAS!
+            </div>
+            <!-- <q-separator vertical class="q-mr-md"></q-separator> -->
+            <div class="cursor-pointer" @click="location_href('dailywork')">
+                업무일지
+            </div>
+            <div class="cursor-pointer">
+                학생관리
+            </div>
+            <div class="cursor-pointer" @click="location_href('test')">
+                시험관리
+            </div>
+            <div class="cursor-pointer" @click="location_href('feedback')">
+                피드백
+            </div>
+            <div class="cursor-pointer" @click="location_href('setting')" v-if="$root.formUser.is_admin == 1">
+                전체설정
+            </div>
+            <q-space></q-space>
+            <div class="">
+                <q-btn color="black" size="md" flat round dense icon="perm_identity" class="q-ml-md" 
+                    @click="is_open_right = !is_open_right">
+                </q-btn>
+            </div>
+        </q-bar>
+
+        <!-- 계정 -->
+        <q-dialog v-model="is_open_right" persistent :maximized="false"
+            transition-show="slide-left" transition-hide="slide-right">
+            <q-card class="bg-white text-black" >
+                <q-bar class="bg-white text-black q-py-lg">
+                    <p class="text-h6">계정</p>
+                    <q-space></q-space>
+                    <q-btn dense flat icon="close" v-close-popup></q-btn>
+                </q-bar>
+                <q-separator></q-separator>
+            
+                <q-card-section >
+                    <div>
+                        <q-btn @click="Logout">로그아웃</q-btn>
+                    </div>
+                </q-card-section>
+            </q-card>
+        </q-dialog>
+    </div>
+</script>
+
+<script>
+    app.component("v-header", {
+        template: "#v-header",
+        data: function () {
+            return {
+                change_user_name: '',
+
+                user: {},
+                is_open_right: false,
+                is_open_left: false,
+                is_profile: false,
+                maximizedToggle: true,
+            };
+        },
+        methods: {
+            location_href: function(url) {                
+                var vm = this;
+                vm.$root.location_href(url);
+            },
+            Logout: function() {
+                window.location.reload();
+            },
+        },
+        mounted: function() {
+            var vm = this;
+        }
+    });
+</script>

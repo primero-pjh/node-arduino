@@ -1,0 +1,23 @@
+<script type="text/x-template" id="v-error">
+    <div :class="{'animate__animated animate__shakeX': error}">
+        <slot name="body">
+        </slot>
+    </div>
+</script>
+
+<script>
+    app.component("v-error", {
+        template: "#v-error",
+        props: ['error'],
+        data: function () {
+            return {
+                
+            };
+        },
+        methods: {
+        },
+        mounted: function() {
+            var vm = this;
+        }
+    });
+</script>

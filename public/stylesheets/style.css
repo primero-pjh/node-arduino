@@ -1,0 +1,72 @@
+@font-face {
+  font-family: 'IM_Hyemin-Bold';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2106@1.1/IM_Hyemin-Bold.woff2') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Cafe24SsurroundAir';
+  src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_2105_2@1.0/Cafe24SsurroundAir.woff') format('woff');
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'Pretendard-Regular';
+  src: url('https://cdn.jsdelivr.net/gh/Project-Noonnu/noonfonts_2107@1.1/Pretendard-Regular.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+* { font-family: 'Pretendard-Regular'; }
+
+html {
+  overflow-x: hidden;
+  background-color: #eaeaea;
+  height: 100%;
+}
+
+p { margin: 0; }
+.w100p { width: 100%; }
+.h100p { height: 100%; }
+#app {
+	width: 100%;
+	height: 100%;
+    /* overflow-x: hidden; */
+    /* max-width: 1200px !important;
+    height: 100%;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0); */
+}
+#box {
+	/* overflow-x: hidden; */
+    max-width: 1200px !important;
+    position: relative;
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+
+body {
+    height: 100%;
+}
+
+.header {
+    background-color: white;
+    width: 100%;
+    height: 72px;
+}
+
+.center {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.room_active {
+    background-color: #eee;
+	color: black;
+}
+

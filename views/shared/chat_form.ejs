@@ -1,0 +1,208 @@
+<script type="text/x-template" id="chat_form">
+    <div id="chat_form" ref="chat_form" style="
+        width: 300px; height: 580px; position: relative; z-index: 5000;" v-show="is_open"
+        class="bg-white shadow-4 animate__animated animate__backInUp">
+        <!-- 헤더 -->
+        <table>
+            <tr>
+                <td v-if="is_channel" style="width: 300px; vertical-align: top;" class="bg-white">
+                    <div class="h100p" style="width: 300px;">
+                        <div class="">
+                            <q-bar dark class="bg-primary text-white">
+                                <div class="col text-center text-weight-bold">
+                                    방 목록
+                                </div>
+                                <q-btn dense flat round 
+                                    icon="add" size="10px" @click="open_modal_room_edit_form($event, 'add')"></q-btn>
+                            </q-bar>
+                        </div>
+                        <div>
+                            <q-list bordered>
+                                <q-item clickable v-ripple v-for="row in $root.room_list" @click="clickRoom(row)"
+                                    :active="row.is_selected == true" active-class="room_active">
+                                    <!-- <q-item-section avatar>
+                                        <img :src="row.thumbnail_image_url" width="30" height="30"/>
+                                    </q-item-section> -->
+                                    <q-item-section style="font-size: 16px;">
+                                        {{row.room_name}}
+                                    </q-item-section>
+                                    <q-item-section avatar>
+                                        <q-btn dense flat round icon="edit" size="10px" v-if="row.room_name != '전체공지방'" 
+                                            @click="open_modal_room_edit_form($event, 'edit', row)"></q-btn>
+                                    </q-item-section>
+                                </q-item>
+                            </q-list>
+                        </div>
+                    </div>
+                </td>
+                <td class="bg-white">
+                    <div style="min-width: 300px; min-height: 580px;">
+                        <div class="">
+                            <q-bar dark class="bg-primary text-white">
+                                <q-btn dense flat round icon="room_preferences" size="10px" @click="open_channel"></q-btn>
+                                <q-btn dense flat round icon="close" size="10px" @click="close"></q-btn>
+                                <!-- <q-btn dense flat round icon="lens" size="8.5px" color="yellow"></q-btn> -->
+                                <!-- <q-btn dense flat round icon="lens" size="8.5px" color="green" @click="is_resize"></q-btn> -->
+                                <div class="col text-center text-weight-bold">
+                                    DWCHAT
+                                </div>
+                                <q-space></q-space>
+                                <q-btn dense flat round icon="person" size="10px" @click="open_user_list"></q-btn>
+                            </q-bar>
+                        </div>
+                
+                        <!-- 바디 -->
+                        <div class="q-pa-md row justify-center">
+                            <div style="width: 100%; height: 100%;">
+                                <q-scroll-area style="height: 450px;" class="shadow-4">
+                                    <template v-for="row in msg_list">
+                                        <q-chat-message :name="row.user_name" :avatar="row.thumbnail_image_url"
+                                            :text="[row.message]" :sent="formUser.user_id == row.user_id"></q-chat-message>
+                                    </template>
+                                </q-scroll-area>
+                            </div>
+                        </div>
+                
+                        <!-- 푸터 -->
+                        <div class="footer q-pa-md" style="position: absolute; bottom: 0; width: 100%;" class="q-pa-sm">
+                            <q-input filled v-model="message" :dense="dense" v-on:keyup.enter="handleSend"/>
+                        </div>
+                    </div>
+                    
+                </td>
+                <td v-if="is_user_list" style="vertical-align: top;" class="bg-white">
+                    <div class="h100p" style="width: 300px;">
+                        <div class="">
+                            <q-bar dark class="bg-primary text-white">
+                                <div class="col text-center text-weight-bold">
+                                    접속자
+                                </div>
+                            </q-bar>
+
+                            <div>
+                                <q-list bordered>
+                                    <q-item clickable v-ripple v-for="row in $root.user_list">
+                                        <q-item-section avatar>
+                                            <img :src="row.thumbnail_image_url" width="30" height="30"/>
+                                        </q-item-section>
+                                        <q-item-section>{{row.user_name}}</q-item-section>
+                                    </q-item>
+                                </q-list>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+    </div>
+</script>
+
+<script>
+    app.component("chat_form", {
+        template: "#chat_form",
+        data: function () {
+            return {
+                is_open: false,
+                is_channel: false,
+                is_user_list: true,
+                msg_list: [],
+                message: "",
+                formUser: {},
+
+                user_list: [],
+            };
+        },
+        methods: {
+            clickRoom: function(row) {
+                var vm = this;
+                console.log("click");
+            },
+            close: function() {
+                var vm = this;
+                vm.is_open = false;
+            },
+            is_resize: function() {
+                $(function() {
+                    $( "#chat_form" ).resizable();
+                });
+            },
+            open_channel: function() {
+                var vm = this;
+                vm.is_channel = !vm.is_channel;
+            },
+            open_user_list: function() {
+                var vm = this;
+                vm.is_user_list = !vm.is_user_list;
+            },
+            open_modal_room_edit_form: function(event, mode, row) {
+                event.stopPropagation();
+                var vm = this;
+                vm.$root.$refs.modal_room_edit_form.open(mode, row, function() {
+                    vm.$root.load_room_list();
+                });
+            },
+            
+            handleSend: function() {
+                var vm = this;
+                // vm.$root.socket.emit("chat", "message");
+                axios.get('/chat/chat', {
+                    params: {
+                        message: vm.message,
+                        user_id: vm.$root.formUser.user_id,
+                        thumbnail_image_url: vm.$root.formUser.thumbnail_image_url,
+                        user_name: vm.$root.formUser.user_name,
+                        socket_id: vm.$root.formUser.socket_id,
+                    }
+                }).then(function(res) {
+                    if(res.data.success == 0) {
+                        vm.$root.location_href('login');
+                    } else {
+                        vm.msg_list.push({
+                            message: vm.message,
+                            user_id: vm.$root.formUser.user_id,
+                            thumbnail_image_url: vm.$root.formUser.thumbnail_image_url,
+                            user_name: vm.$root.formUser.user_name,
+                            socket_id: vm.$root.formUser.socket_id,
+                        });
+                        vm.message = "";
+                    } 
+                });
+            },
+            open_modal_room_create: function() {
+                var vm = this;
+                
+            },
+            
+        },
+        mounted: function() {
+            var vm = this;
+            $(function() {
+                $("#chat_form").draggable();
+            });
+            
+            vm.$root.socket.on('/chat/chat', function(data) {
+                vm.msg_list.push(data);
+            });
+
+            vm.$root.socket.on('join_user', function(data) {
+                //console.log('join user:', data);
+                if(data) {
+                    vm.$root.user_list.push(data);
+                }
+            });
+            // disconnect event -> user splice
+            vm.$root.socket.on('exit_user', function(socket_id) {
+                var row = vm.$root.user_list;
+                for(var i=0; i<row.length; i++) {
+                    if(row[i].socket_id == socket_id) {
+                        row.splice(i,1);
+                        break;
+                    }
+                }
+            });
+            vm.formUser = vm.$root.formUser;
+        }
+    });
+</script>
+
