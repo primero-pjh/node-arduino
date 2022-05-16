@@ -7,6 +7,7 @@
         <% include ./shared/libs.ejs %>
         <div id="app">
             Test
+            <q-btn @click="socekt_send"></q-btn>
         </div>
     </body>
     <script>
@@ -14,11 +15,15 @@
         const app = Vue.createApp({
             data () {
                 return {
-                   
+                   socket: null,
                 }
             },
             methods: {
-                
+                socekt_send: function() {
+                    socket.emit("Connection", {
+                        data: "안녕"
+                    });
+                }
             },
             mounted: function() {
                 
