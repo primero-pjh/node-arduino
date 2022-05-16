@@ -4,7 +4,31 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
-console.log("port:", port);
+
+const { SerialPort } = require('serialport');
+
+const sp = new SerialPort({
+	path: 'COM4',
+	baudRate: 9600,
+	autoOpen: false,
+	parser: new Readline("\r\n")
+});
+
+sp.open(function (err) {
+	if (err) {
+	  return console.log('Error opening port: ', err.message)
+	}
+  });
+
+  setInterval(() => {
+	console.log("interval");
+	sp.write("1");
+  }, 1000);
+  
+  // The open event is always emitted
+  sp.on('open', function() {
+	// open logic
+  })
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);

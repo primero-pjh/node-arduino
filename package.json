@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@serialport/parser-readline": "^10.3.0",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
     "dotenv": "^10.0.0",
@@ -18,6 +19,7 @@
     "mysql2": "^2.2.5",
     "request": "^2.88.2",
     "sequelize": "^6.6.5",
+    "serialport": "^10.4.0",
     "serve-index": "^1.9.1",
     "socket.io": "^4.2.0",
     "vue-draggable-next": "^2.0.1",
