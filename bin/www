@@ -4,26 +4,25 @@ var http = require('http');
 
 var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
+console.log(port);
+
 
 const { SerialPort } = require('serialport');
+const { ReadlineParser } = require('@serialport/parser-readline');
 
 const sp = new SerialPort({
-	path: 'COM4',
+	path: 'COM3',
 	baudRate: 9600,
 	autoOpen: false,
-	parser: new Readline("\r\n")
 });
+
+const parser = sp.pipe(new ReadlineParser({ delimiter: '\r\n' }));
 
 sp.open(function (err) {
 	if (err) {
 	  return console.log('Error opening port: ', err.message)
 	}
   });
-
-  setInterval(() => {
-	console.log("interval");
-	sp.write("1");
-  }, 1000);
   
   // The open event is always emitted
   sp.on('open', function() {
@@ -35,13 +34,14 @@ var io = require('socket.io')(server);
 var socket = new Object();
 // var user_list = new Array();
 var user_dict = new Object();
+var is_read = false;
+
+
 io.on('connection' , function(_socket) { 
 	console.log('_socket:', _socket.id);
-	setInterval(() => {
-		_socket.emit('Connection', {
-			value: "반갑습니다."
-		});
-	}, 1000);
+	_socket.emit('Connection', {
+		value: "반갑습니다."
+	});
 	
 	
 	module.exports = { socket, user_dict, io };
@@ -55,9 +55,32 @@ io.on('connection' , function(_socket) {
 
 	_socket.on("message", function(data) {
 		console.log(data);
-		아두이노.제어
 	});
+	_socket.on("is_read", function(data) {
+		console.log("data:", data);
+		is_read = true;
+	});
+	
 
+	_socket.on("send_decimal", function(data) {
+		console.log("data:", data);
+		sp.write(String(data));
+	})
+
+	parser.on("data", ((str) => {
+		// io.emit("data_receive", data);
+		
+		if(is_read) {
+			var arr = str.split(" ");
+			var t = arr[0].split("=")[1];
+			var h = arr[1].split("=")[1];
+			console.log("data:", str);
+			_socket.emit("receive_dht", {
+				t: t,
+				h: h,
+			});
+		}
+	}));
 });
 server.listen(port);
 server.on('error', onError);

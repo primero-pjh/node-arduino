@@ -5,28 +5,64 @@
     </head>
     <body>
         <% include ./shared/libs.ejs %>
+        
         <div id="app">
-            Test
-            <q-btn @click="socekt_send"></q-btn>
+            <div style="width: 400px;">
+                <div id="chart_div" style="height: 500px;"></div>
+            </div>
+            <div class="q-pa-md">
+                10진수 입력
+                <div class="row">
+                    <q-input outlined v-model="DEC_value" dense 
+                        style="width: 200px;" class="q-pr-md">
+
+                    </q-input>
+                    <q-btn @click="send_decimal" label="전송"></q-btn>
+                </div>
+                <div>
+                    <q-btn @click="Read" label="센서 읽기"></q-btn>
+                </div>
+            </div>
         </div>
     </body>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+
     <script>
-        
         const app = Vue.createApp({
             data () {
                 return {
                    socket: null,
+                   DEC_value: 255,
+                   myChart: null,
+                   dht_chart: null,
+                   datas: [['온습도', '값'], ['온도', 0], ['습도', 0]]
                 }
             },
             methods: {
-                socekt_send: function() {
-                    socket.emit("Connection", {
-                        data: "안녕"
-                    });
+                Read: function() {
+                    var vm = this;
+                    vm.socket.emit("is_read", 1);
+                },
+                send_decimal: function() {
+                    var vm = this;
+                     vm.socket.emit("send_decimal", vm.DEC_value);
                 }
             },
             mounted: function() {
-                
+                var vm = this;
+                var orgdata = [
+                    ['종류', '개수'], ['도시락', 3], ['갈비탕', 4], ['뼈해장국', 8], ['김밥', 2],
+                    ['비빔밥', 1], ['메밀소바', 4]
+                ];
+                function drawBasic(){
+                    var data = google.visualization.arrayToDataTable(orgdata);
+                    var option = {title: '선호하는 점심', "is3D": true};
+                    var chart = new google.visualization.BarChart(
+                        document.getElementById('chart_div'));
+                        chart.draw(data, option);
+                }
+                google.charts.load('current', {'packages':['corechart']});
+                google.charts.setOnLoadCallback(drawBasic);
             },
             created: function() {
                 var vm = this;
@@ -35,6 +71,19 @@
                     transports : ['websocket'],
                 });
                 vm.socket = socket;
+                socket.on("receive_dht", function(data) {
+                    vm.datas[1][1] = parseFloat(data["t"]);
+                    vm.datas[2][1] = parseFloat(data["h"]);
+                    function drawBasic(){
+                        var data = google.visualization.arrayToDataTable(vm.datas);
+                        var option = {title: '온습도', "is3D": true};
+                        var chart = new google.visualization.BarChart(
+                            document.getElementById('chart_div'));
+                            chart.draw(data, option);
+                    }
+                    google.charts.load('current', {'packages':['corechart']});
+                    google.charts.setOnLoadCallback(drawBasic);
+                });
             },
         });
     </script>

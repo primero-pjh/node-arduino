@@ -1,0 +1,43 @@
+#include <Adafruit_Sensor.h>
+#include "DHT.h"
+#define DHT11_PIN 13
+#define DHTTYPE DHT11
+DHT dht(DHT11_PIN, DHTTYPE);
+void setup()
+{
+  pinMode(9, OUTPUT);
+  pinMode(8, OUTPUT);
+  pinMode(7, OUTPUT);
+  pinMode(6, OUTPUT);
+  pinMode(5, OUTPUT);
+  pinMode(4, OUTPUT);
+  pinMode(3, OUTPUT);
+  pinMode(2, OUTPUT);
+  Serial.begin(9600);
+  dht.begin();
+}
+void loop()
+{
+  float humidity = dht.readHumidity(); // 상대 습도 읽기
+  float temperature = dht.readTemperature(); // 온도 읽기
+  Serial.print("Temperature=");
+  Serial.print(temperature);
+  Serial.print(" Humidity=");
+  Serial.println(humidity);
+  delay(1000);
+  if (Serial.available())
+  {
+    String value = Serial.readString();
+    int num = value.toInt();
+
+    String result = "";
+    for(int i=0; i<8; i++) {
+      int a = num % 2;
+      num /= 2;
+      result += String(a);  
+    }
+    for(int i=result.length() - 1; i>=0; i--) {
+      digitalWrite(i+2, result[i] == '1');
+    }
+  }
+}
