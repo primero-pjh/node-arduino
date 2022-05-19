@@ -36,7 +36,6 @@ var socket = new Object();
 var user_dict = new Object();
 var is_read = false;
 
-
 io.on('connection' , function(_socket) { 
 	console.log('_socket:', _socket.id);
 	_socket.emit('Connection', {
@@ -69,7 +68,6 @@ io.on('connection' , function(_socket) {
 
 	parser.on("data", ((str) => {
 		// io.emit("data_receive", data);
-		
 		if(is_read) {
 			var arr = str.split(" ");
 			var t = arr[0].split("=")[1];
