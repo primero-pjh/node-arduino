@@ -70,19 +70,21 @@
                     transports : ['websocket'],
                 });
                 vm.socket = socket;
-                socket.on("receive_dht", function(data) {
-                    vm.datas[1][1] = parseFloat(data["t"]);
-                    vm.datas[2][1] = parseFloat(data["h"]);
-                    function drawBasic(){
-                        var data = google.visualization.arrayToDataTable(vm.datas);
-                        var option = {title: '온습도', "is3D": true};
-                        var chart = new google.visualization.BarChart(
-                            document.getElementById('chart_div'));
-                            chart.draw(data, option);
-                    }
-                    google.charts.load('current', {'packages':['corechart']});
-                    google.charts.setOnLoadCallback(drawBasic);
-                });
+                socket.emit('timer', '00:03');
+                // socket.emit('alarm', {startDate: '14:00:00', endDate: '16:00:00'});
+                // socket.on("receive_dht", function(data) {
+                //     vm.datas[1][1] = parseFloat(data["t"]);
+                //     vm.datas[2][1] = parseFloat(data["h"]);
+                //     function drawBasic(){
+                //         var data = google.visualization.arrayToDataTable(vm.datas);
+                //         var option = {title: '온습도', "is3D": true};
+                //         var chart = new google.visualization.BarChart(
+                //             document.getElementById('chart_div'));
+                //             chart.draw(data, option);
+                //     }
+                //     google.charts.load('current', {'packages':['corechart']});
+                //     google.charts.setOnLoadCallback(drawBasic);
+                // });
             },
         });
     </script>

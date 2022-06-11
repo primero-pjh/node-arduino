@@ -17,6 +17,7 @@
     "moment": "^2.29.1",
     "morgan": "~1.9.1",
     "mysql2": "^2.2.5",
+    "node-schedule": "^2.1.0",
     "request": "^2.88.2",
     "sequelize": "^6.6.5",
     "serialport": "^10.4.0",

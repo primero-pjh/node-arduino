@@ -6,9 +6,15 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 console.log(port);
 
-
+var moment = require('moment');
+require('moment-timezone');
+moment.tz.setDefault("Asia/Seoul");
 const { SerialPort } = require('serialport');
 const { ReadlineParser } = require('@serialport/parser-readline');
+const timer = require('node-schedule');
+var t_dict = new Object();
+// const alarm = require('node-schedule');
+var a_dict = new Object();
 
 const sp = new SerialPort({
 	path: 'COM3',
@@ -41,6 +47,68 @@ io.on('connection' , function(_socket) {
 	_socket.emit('Connection', {
 		value: "반갑습니다."
 	});
+
+	_socket.on('timer', function(time) {
+		if(!time) {
+			_socket.emit('failMessage', '값이 입력되지 않았습니다.');	
+			return;
+		}
+		for(var k in t_dict) {
+			var my_job = timer.scheduledJobs[k];
+			my_job.cancel();
+			delete t_list[k];
+		}
+		// 온습도 켜지는 코드
+		var min = time.split(":")[0];
+		var sec = time.split(":")[1];
+		var today = moment();
+		console.log(today);
+		// today.setSeconds(today.getSeconds() + parseInt(sec));
+		// today.setMinutes(today.getMinutes() + parseInt(min));
+		today.add(parseInt(min), 'm');
+		today.add(parseInt(sec), 's');
+		console.log("today:", today);
+		var date = today.format("YYYY-MM-DDTHH:mm:ss");
+		date = new Date(date);
+		console.log(date);
+
+		var id = Object.keys(t_dict).length;
+		var j = timer.scheduleJob(toString(id), date, function() {
+			console.log("node 스케쥴 테스트");
+			delete t_dict[id];
+		});
+		t_dict[id] = true;
+	});
+
+	_socket.on('alarm', function(obj) {
+		var startDate = obj["startDate"];
+		var endDate = obj["endDate"];
+		console.log("startDate:", startDate);
+		console.log("endDate:", endDate);
+		var today = moment().format('YYYY-MM-DD');
+
+		var m_sd = moment(today + "T" + startDate);
+		var m_ed = moment(today + "T" + endDate);
+		console.log(m_sd);
+		console.log(m_ed);
+
+		var s_date = new Date(m_sd.format('YYYY-MM-DDTHH:mm:ss'));
+		console.log("s_date:", s_date);
+		var e_date = new Date(m_ed.format('YYYY-MM-DDTHH:mm:ss'));
+		var id = Object.keys(a_dict).length;
+		console.log(id);
+		timer.scheduleJob(toString(id), s_date, function() {
+			console.log("node 스케쥴 테스트");
+		});
+		a_dict[id] = true;
+		// id = Object.keys(a_dict).length;
+		// var q = alarm.scheduleJob(id, e_date, function() {
+		// 	console.log("e_date");
+		// });
+		// a_dict[id] = true;
+		console.log("a_dict:", a_dict);
+		// console.log("today:", today);
+	})
 	
 	
 	module.exports = { socket, user_dict, io };
