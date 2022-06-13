@@ -71,6 +71,7 @@
                 });
                 vm.socket = socket;
                 socket.emit('timer', '00:03');
+                socket.emit('alarm');
                 // socket.emit('alarm', {startDate: '14:00:00', endDate: '16:00:00'});
                 // socket.on("receive_dht", function(data) {
                 //     vm.datas[1][1] = parseFloat(data["t"]);

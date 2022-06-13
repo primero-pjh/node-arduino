@@ -6,6 +6,18 @@ var port = normalizePort(process.env.PORT || '3000');
 app.set('port', port);
 console.log(port);
 
+const admin = require("firebase-admin");//fcm,firestore
+const firestore = require("firebase-admin/firestore");
+let serviceAccount = require("../firebase-admin.json");
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
+const db = firestore.getFirestore();
+
+var dict = {};
+var socket = new Object();
+
+
 var moment = require('moment');
 require('moment-timezone');
 moment.tz.setDefault("Asia/Seoul");
@@ -23,26 +35,93 @@ const sp = new SerialPort({
 });
 
 const parser = sp.pipe(new ReadlineParser({ delimiter: '\r\n' }));
-
 sp.open(function (err) {
 	if (err) {
 	  return console.log('Error opening port: ', err.message)
 	}
-  });
+});
   
-  // The open event is always emitted
-  sp.on('open', function() {
-	// open logic
-  })
+// The open event is always emitted
+sp.on('open', function() {
+// open logic
+})
+
+//firestore 알림값 받아오기
+var alarmlist = db.collection('Alarm').onSnapshot(querySnapshot =>{
+    querySnapshot.docChanges().forEach(change => {
+        if (change.type === 'added') {
+			var alarm = change.doc.data();
+			var id = change.doc.id;
+			dict[id] = {
+				st: alarm.startTime,
+				et: alarm.endTime,
+			}
+			console.log("dict:", dict);
+			var alarm_start = timer.scheduledJobs[id + "_start"];
+			var alarm_end = timer.scheduledJobs[id + '_end'];
+			if(alarm_start) {
+				alarm_start.cancel();
+				sp.write('alarm=0');
+			}
+			if(alarm_end) {
+				alarm_end.cancel();
+				sp.write('alarm=0');
+			}
+
+			var data = dict[id];
+			console.log("data:", data);
+			var startDate = data.st;
+			var endDate = data.et;
+			console.log("startDate:", startDate);
+			console.log("endDate:", endDate);
+			var today = moment().format('YYYY-MM-DD');
+
+			var m_sd = moment(today + "T" + startDate);
+			var m_ed = moment(today + "T" + endDate);
+			console.log(m_sd);
+			console.log(m_ed);
+
+			var s_date = new Date(m_sd.format('YYYY-MM-DDTHH:mm:ss'));
+			console.log("s_date:", s_date);
+			var e_date = new Date(m_ed.format('YYYY-MM-DDTHH:mm:ss'));
+			console.log("e_date:", e_date);
+
+			timer.scheduleJob(id + '_start', s_date, function() {
+				console.log("alarm 시작");
+				sp.write('alarm=1');
+			});
+			timer.scheduleJob(id + '_end', s_date, function() {
+				console.log("alarm 종료");
+				sp.write('alarm=0');
+			});
+        }
+        if (change.type === 'removed') {
+			var alarm = change.doc.data();
+			var id = change.doc.id;
+			var alarm_start = timer.scheduledJobs[id + '_start'];
+			var alarm_end = timer.scheduledJobs[id + '_end'];
+			if(alarm_start) {
+				alarm_start.cancel();
+				sp.write('alarm=0');
+			}
+			if(alarm_end) {
+				alarm_end.cancel();
+				sp.write('alarm=0');
+			}
+			delete dict[id];
+			console.log("remove dict:", dict);
+        }
+    });
+});
 
 var server = http.createServer(app);
 var io = require('socket.io')(server);
-var socket = new Object();
 // var user_list = new Array();
 var user_dict = new Object();
 var is_read = false;
 
 io.on('connection' , function(_socket) { 
+	socket = _socket;
 	console.log('_socket:', _socket.id);
 	_socket.emit('Connection', {
 		value: "반갑습니다."
@@ -53,36 +132,51 @@ io.on('connection' , function(_socket) {
 			_socket.emit('failMessage', '값이 입력되지 않았습니다.');	
 			return;
 		}
-		for(var k in t_dict) {
-			var my_job = timer.scheduledJobs[k];
+		var my_job = timer.scheduledJobs['timer'];
+		if(my_job) {
 			my_job.cancel();
-			delete t_list[k];
+			sp.write('timer=0');
 		}
+		dict['timer'] = { time: time }
+		
+		sp.write('timer=1');
 		// 온습도 켜지는 코드
 		var min = time.split(":")[0];
 		var sec = time.split(":")[1];
 		var today = moment();
-		console.log(today);
+		console.log("today:", today);
 		// today.setSeconds(today.getSeconds() + parseInt(sec));
 		// today.setMinutes(today.getMinutes() + parseInt(min));
 		today.add(parseInt(min), 'm');
 		today.add(parseInt(sec), 's');
-		console.log("today:", today);
 		var date = today.format("YYYY-MM-DDTHH:mm:ss");
 		date = new Date(date);
-		console.log(date);
+		console.log("date:", date);
 
-		var id = Object.keys(t_dict).length;
-		var j = timer.scheduleJob(toString(id), date, function() {
-			console.log("node 스케쥴 테스트");
-			delete t_dict[id];
+		timer.scheduleJob('timer', date, function() {
+			console.log("timer 종료");
+			sp.write('timer=0');
+			delete dict['timer'];
+			console.log("dict:", dict);
 		});
-		t_dict[id] = true;
 	});
+	
+	_socket.on('alarm', function() {
+		var alarm_start = timer.scheduledJobs['alarm_start'];
+		var alarm_end = timer.scheduledJobs['alarm_end'];
+		if(alarm_start) {
+			alarm_start.cancel();
+			sp.write('alarm=0');
+		}
+		if(alarm_end) {
+			alarm_end.cancel();
+			sp.write('alarm=0');
+		}
 
-	_socket.on('alarm', function(obj) {
-		var startDate = obj["startDate"];
-		var endDate = obj["endDate"];
+		var data = dict['alarm'];
+		console.log("data:", data);
+		var startDate = data.st;
+		var endDate = data.et;
 		console.log("startDate:", startDate);
 		console.log("endDate:", endDate);
 		var today = moment().format('YYYY-MM-DD');
@@ -95,19 +189,16 @@ io.on('connection' , function(_socket) {
 		var s_date = new Date(m_sd.format('YYYY-MM-DDTHH:mm:ss'));
 		console.log("s_date:", s_date);
 		var e_date = new Date(m_ed.format('YYYY-MM-DDTHH:mm:ss'));
-		var id = Object.keys(a_dict).length;
-		console.log(id);
-		timer.scheduleJob(toString(id), s_date, function() {
-			console.log("node 스케쥴 테스트");
+		console.log("e_date:", e_date);
+
+		timer.scheduleJob('alarm_start', s_date, function() {
+			console.log("alarm 시작");
+			sp.write('alarm=1');
 		});
-		a_dict[id] = true;
-		// id = Object.keys(a_dict).length;
-		// var q = alarm.scheduleJob(id, e_date, function() {
-		// 	console.log("e_date");
-		// });
-		// a_dict[id] = true;
-		console.log("a_dict:", a_dict);
-		// console.log("today:", today);
+		timer.scheduleJob('alarm_end', s_date, function() {
+			console.log("alarm 종료");
+			sp.write('alarm=0');
+		});
 	})
 	
 	
